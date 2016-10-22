@@ -1,2 +1,2 @@
 # Data Lab
-Some projects for fun ...
+Data related projects for fun.
