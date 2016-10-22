@@ -1,0 +1,15 @@
+.idea
+*/__pychache__
+*.pyc
+
+*.iml
+
+.vagrant
+
+target
+*.log
+
+dependency-reduced-pom.xml
+
+storm-twitter-sentiment/storm-twitter/docker/data/namenode
+storm-twitter-sentiment/storm-twitter/docker/data/datanode*

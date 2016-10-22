@@ -1,0 +1,24 @@
+version: "2"
+
+services:
+  zookeeper:
+    image: wlezzar/zookeeper-exhibitor:confluent-2.0.1
+    network_mode: host
+  kafka:
+    image: wlezzar/kafka:confluent-2.0.1
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_CONF_host_name=${KAFKA_CLUSTER_PRIVATE_IP}
+      - KAFKA_CONF_advertised_host_name=${KAFKA_CLUSTER_PRIVATE_IP}
+    network_mode: host
+  elasticsearch:
+    image: wlezzar/elasticsearch:2.3
+    network_mode: host
+  kibana:
+    image: kibana:4.2
+    environment:
+      - ELASTICSEARCH_URL=http://localhost:9200
+    network_mode: host
+
+  

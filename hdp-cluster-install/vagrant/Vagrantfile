@@ -1,0 +1,67 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$script = <<SCRIPT
+sudo /vagrant/data/provisionning/passwordless-ssh.sh
+sudo yum -y install ntp
+sudo chkconfig ntpd on
+sudo service ntpd start
+sudo /vagrant/data/provisionning/update-hosts-fqdn.sh
+sudo chkconfig iptables off
+sudo /etc/init.d/iptables stop
+sudo setenforce 0
+sudo sed -i 's/SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+sudo sh -c 'echo "* soft nofile 10000" >> /etc/security/limits.conf'
+sudo sh -c 'echo "* hard nofile 10000" >> /etc/security/limits.conf'
+sudo sh -c 'echo never > /sys/kernel/mm/redhat_transparent_hugepage/defrag'
+sudo sh -c 'echo never > /sys/kernel/mm/redhat_transparent_hugepage/enabled'
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://atlas.hashicorp.com/search.
+  config.vm.box = "bento/centos-6.7"
+  config.vm.provision "shell", inline:
+  $script
+
+  # Ambari
+  config.vm.define :ambari do |a1|
+  a1.vm.hostname = "ambari.mycluster"
+  a1.vm.network :private_network, ip: "192.168.50.11"
+  a1.vm.provider :virtualbox do |vb|
+      vb.memory = "2048"
+    end
+  end
+
+  # Master
+  config.vm.define :master do |m1|
+    m1.vm.hostname = "master.mycluster"
+    m1.vm.network :private_network, ip: "192.168.50.12"
+    m1.vm.provider :virtualbox do |vb|
+      vb.memory = "4096"
+    end
+  end
+
+  # Slaves
+  config.vm.define :slave1 do |s1|
+    s1.vm.hostname = "slave1.mycluster"
+    s1.vm.network :private_network, ip: "192.168.50.21"
+    s1.vm.provider :virtualbox do |vb|
+      vb.memory = "2048"
+    end
+  end
+
+  # Slave2
+  # config.vm.define :slave2 do |s2|
+  #   s2.vm.hostname = "slave2.mycluster"
+  #   s2.vm.network :private_network, ip: "192.168.50.22"
+  #   s2.vm.provider :virtualbox do |vb|
+  #     vb.memory = "2048"
+  #   end
+  # end
+
+end

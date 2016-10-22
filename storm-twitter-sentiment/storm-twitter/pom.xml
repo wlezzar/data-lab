@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>wlz-projects</groupId>
+    <artifactId>storm-twitter-sentiment</artifactId>
+    <version>1.0</version>
+
+    <properties>
+        <scala.version>2.10</scala.version>
+        <scala.minor.version>2.10.6</scala.minor.version>
+
+        <slf4j.version>1.7.13</slf4j.version>
+        <kafka.clients.version>0.9.0.1</kafka.clients.version>
+
+        <storm.version>1.0.2</storm.version>
+        <storm.scope>compile</storm.scope>
+
+        <twitter4j.version>4.0.5</twitter4j.version>
+
+        <stanfordNLP.version>3.6.0</stanfordNLP.version>
+
+        <scopt.version>3.3.0</scopt.version>
+
+    </properties>
+
+    <dependencies>
+        <!-- sl4j dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- Storm dependencies -->
+        <dependency>
+            <groupId>org.apache.storm</groupId>
+            <artifactId>storm-core</artifactId>
+            <version>${storm.version}</version>
+            <scope>${storm.scope}</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.storm</groupId>
+            <artifactId>storm-hdfs</artifactId>
+            <version>${storm.version}</version>
+        </dependency>
+
+        <!-- twitter -->
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>${twitter4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-stream</artifactId>
+            <version>${twitter4j.version}</version>
+        </dependency>
+
+        <!-- NLP dependencies -->
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>${stanfordNLP.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>${stanfordNLP.version}</version>
+            <classifier>models</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        
+
+        <dependency>
+            <groupId>com.github.scopt</groupId>
+            <artifactId>scopt_${scala.version}</artifactId>
+            <version>${scopt.version}</version>
+        </dependency>
+
+
+    </dependencies>
+
+
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.2</version>
+                <configuration>
+                    <filters>
+                        <filter>
+                            <!--
+                        Exclude files that sign a jar
+                        (one or multiple of the dependencies).
+                        One may not repack a signed jar without
+                        this, or you will get a
+                        SecurityException at program start.
+                    -->
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                                <exclude>META-INF/*.INF</exclude> <!-- This one may not be required -->
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Compile scala file in java project-->
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaCompatVersion>${scala.version}</scalaCompatVersion>
+                    <scalaVersion>${scala.minor.version}</scalaVersion>
+                    <args>
+                        <arg>-Yresolve-term-conflict:package</arg>
+                    </args>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

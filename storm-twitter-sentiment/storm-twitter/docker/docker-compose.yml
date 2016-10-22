@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+
+  # HDFS
+  namenode:
+    image: wlezzar/hdfs-namenode:2.7
+    network_mode: host
+    volumes:
+      - ./data/namenode:/data/namenode
+    env_file:
+      - ./hadoop.env
+
+  datanode:
+    image: wlezzar/hdfs-datanode:2.7
+    network_mode: host
+    volumes:
+      - ./data/datanode:/data/datanode
+    env_file:
+      - ./hadoop.env
+
+  # Zeppelin
+  zeppelin:
+    image: dylanmei/zeppelin
+    network_mode: host
+    volumes:
+      - ./data/zeppelin-notebooks:/usr/zeppelin/notebook

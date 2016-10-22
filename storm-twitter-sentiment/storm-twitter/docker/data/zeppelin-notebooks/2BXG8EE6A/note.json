@@ -1,0 +1,273 @@
+{
+  "paragraphs": [
+    {
+      "title": "Global configuration",
+      "text": "%md\nSet the following variables to suit your environment. If you launched the storm job with the default configuration provided in the documentation, you can leave these parameters unmodified.",
+      "dateUpdated": "Sep 3, 2016 11:27:57 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {},
+          "map": {
+            "baseMapType": "Streets",
+            "isOnline": true,
+            "pinCols": []
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "title": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1472820654643_790798795",
+      "id": "20160902-125054_1535085368",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eSet the following variables to suit your environment. If you launched the storm job with the default configuration provided in the documentation, you can leave these parameters unmodified.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Sep 2, 2016 12:50:54 PM",
+      "dateStarted": "Sep 3, 2016 11:27:55 AM",
+      "dateFinished": "Sep 3, 2016 11:27:55 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val dataFsPath \u003d \"hdfs://localhost:8020/twitter/\"",
+      "dateUpdated": "Sep 3, 2016 11:24:29 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {},
+          "map": {
+            "baseMapType": "Streets",
+            "isOnline": true,
+            "pinCols": []
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1472820841566_1420692397",
+      "id": "20160902-125401_1705444219",
+      "dateCreated": "Sep 2, 2016 12:54:01 PM",
+      "dateStarted": "Sep 3, 2016 11:24:29 AM",
+      "dateFinished": "Sep 3, 2016 11:24:43 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Data parsing",
+      "text": "%md\nHere, we parse the text file output by storm and transform it into a Dataframe in order for it to be queryable.",
+      "dateUpdated": "Sep 3, 2016 11:28:27 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {},
+          "map": {
+            "baseMapType": "Streets",
+            "isOnline": true,
+            "pinCols": []
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "tableHide": false,
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1472822119011_-524866481",
+      "id": "20160902-131519_833057607",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eHere, we parse the text file output by storm and transform it into a Dataframe in order for it to be queryable.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Sep 2, 2016 1:15:19 AM",
+      "dateStarted": "Sep 3, 2016 11:28:27 AM",
+      "dateFinished": "Sep 3, 2016 11:28:27 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n/**\n * Loading data into a Spark Dataframe in order to access it using SQL.\n */\nimport java.sql.Date\n\ncase class TwitterData(user:String, createdAt:java.sql.Date,text:String,retweetCount:Int,latitude:Double,longitude:Double,sentiment:Int)\n\ndef parse(line:String):TwitterData \u003d {\n    val parts \u003d line.split(\u0027|\u0027)\n    TwitterData(parts(0),new Date(parts(1).toLong),parts(2),parts(3).toInt,parts(4).toDouble,parts(5).toDouble, parts(6).toInt)\n}\n\nval parsedData \u003d sc.textFile(dataFsPath).map(parse)\nval df \u003d parsedData.toDF\ndf.cache()\ndf.count()\n\ndf.registerTempTable(\"tweets\")",
+      "dateUpdated": "Sep 3, 2016 11:24:49 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {},
+          "map": {
+            "baseMapType": "Streets",
+            "isOnline": true,
+            "pinCols": []
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1472820136636_1622878205",
+      "id": "20160902-124216_172536125",
+      "dateCreated": "Sep 2, 2016 12:42:16 PM",
+      "dateStarted": "Sep 3, 2016 11:24:49 AM",
+      "dateFinished": "Sep 3, 2016 11:24:59 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Data querying (SQL)",
+      "text": "%sql\nSELECT * FROM tweets WHERE sentiment !\u003d 0",
+      "dateUpdated": "Sep 3, 2016 11:28:51 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": true,
+          "keys": [
+            {
+              "name": "user",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "createdAt",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "user",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "createdAt",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          },
+          "map": {
+            "baseMapType": "Streets",
+            "isOnline": true,
+            "pinCols": [],
+            "lat": {
+              "name": "latitude",
+              "index": 4.0,
+              "aggr": "sum"
+            },
+            "lng": {
+              "name": "longitude",
+              "index": 5.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/sql",
+        "helium": {},
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1472820185015_2140978443",
+      "id": "20160902-124305_1140857130",
+      "dateCreated": "Sep 2, 2016 12:43:05 PM",
+      "dateStarted": "Sep 3, 2016 11:26:39 AM",
+      "dateFinished": "Sep 3, 2016 11:26:39 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%spark ",
+      "dateUpdated": "Sep 2, 2016 1:39:37 AM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1472823577688_-1173116948",
+      "id": "20160902-133937_438054166",
+      "dateCreated": "Sep 2, 2016 1:39:37 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "TwitterStorm",
+  "id": "2BXG8EE6A",
+  "lastReplName": {
+    "value": "md"
+  },
+  "angularObjects": {
+    "2BV3JTE1U:shared_process": [],
+    "2BV1BS9DS:shared_process": [],
+    "2BWZBZKS5:shared_process": [],
+    "2BUD52BFT:shared_process": [],
+    "2BW1GRN82:shared_process": [],
+    "2BWUPADJ7:shared_process": [],
+    "2BUN1GXEP:shared_process": [],
+    "2BW7UGCKS:shared_process": [],
+    "2BUXT2WKK:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}
